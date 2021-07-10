@@ -1,16 +1,12 @@
 #!/bin/python3
 
 import gi
-import urllib3
-import components.posts
+
 import components.backend
+import components.posts
 from components.ui.headerbar import HeaderBar
 from components.ui.page import Page
 from components.ui.post import Post
-
-from gi.repository import Gio
-gi.require_version("GdkPixbuf", "2.0")
-from gi.repository.GdkPixbuf import Pixbuf
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
@@ -53,10 +49,9 @@ class RequestApp(Gtk.Window):
 
             for post in posts:
                 page.add_to_flowbox(Post(post.title, post.image, post.description, post.author))
-            
+
 
 win = RequestApp()
 win.connect("destroy", Gtk.main_quit)
 win.show_all()
 Gtk.main()
-

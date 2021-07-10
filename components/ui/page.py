@@ -3,6 +3,7 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
+
 class Page(Gtk.ScrolledWindow):
     def __init__(self, stack, name):
         super().__init__()
@@ -15,7 +16,7 @@ class Page(Gtk.ScrolledWindow):
         self.box.set_selection_mode(Gtk.SelectionMode.NONE)
 
         self.add(self.box)
-        
+
         stack.add_titled(self, self.name, self.name)
 
     def add_to_flowbox(self, widget):

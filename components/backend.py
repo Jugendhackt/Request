@@ -76,9 +76,9 @@ class Backend:
         # Get JSON from server
         res = (
             grequests.get(api["url"], headers={'User-Agent': 'Request'})
-            .send()
-            .response
-            .json()
+                .send()
+                .response
+                .json()
         )
         # Transform JSON from server to Post objects
         posts = jmespath.search(api["query"], res)

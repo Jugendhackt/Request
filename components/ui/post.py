@@ -7,6 +7,7 @@ from gi.repository.GdkPixbuf import Pixbuf
 from gi.repository import Gio
 import urllib3
 
+
 class Post(Gtk.Button):
     def __init__(self, title="", image="", description="", author_name=""):
         super().__init__()
