@@ -21,6 +21,10 @@ class RequestApp(Gtk.Window):
                 "name": "Reddit",
                 "api": "reddit.json"
             },
+            {
+                "name": "Twitter",
+                "api": "reddit.json"
+            },
         ]
         # Headerbar
         self.headerbar = HeaderBar(self, title="Response", subtitle="Reddit")
@@ -33,6 +37,7 @@ class RequestApp(Gtk.Window):
         stack = Gtk.Stack()
         stack.set_hexpand(True)
         stack.set_vexpand(True)
+        stack.connect("notify::visible-child", lambda stack, param: print("Stack changed"))
         grid.attach(stack, 1, 0, 1, 1)
 
         stacksidebar = Gtk.StackSidebar()
