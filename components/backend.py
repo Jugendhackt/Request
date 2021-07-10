@@ -1,7 +1,7 @@
 #!/bin/python3
 import json
 
-import grequests
+import requests
 import jmespath
 
 from components.posts import Post
@@ -74,12 +74,11 @@ class Backend:
         with open(f"apis/{fetch['api']}", "r") as file:
             api = json.load(file)
         # Get JSON from server
-        res = (
-            grequests.get(api["url"], headers={'User-Agent': 'Request'})
-                .send()
-                .response
-                .json()
-        )
+        req = requests.get(api["url"], headers={'User-Agent': 'Request'})
+        if not req.ok:
+            print(req.status_code)
+            return []
+        res = req.json()
         # Transform JSON from server to Post objects
         posts = jmespath.search(api["query"], res)
         posts = [Post(post, fetch["api"]) for post in posts]

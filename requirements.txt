@@ -1,4 +1,4 @@
-grequests==0.6.0
+requests~=2.25.1
 jmespath==0.10.0
 PyGObject~=3.30.4
 urllib3~=1.26.6
