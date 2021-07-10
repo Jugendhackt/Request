@@ -1,0 +1,2 @@
+grequests==0.6.0
+jmespath==0.10.0
