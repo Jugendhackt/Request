@@ -43,15 +43,23 @@ class Post(Gtk.Button):
         self.imageLabel.set_from_pixbuf(pixbuf)
 
 
-class Page(Gtk.FlowBox):
+class Page(Gtk.ScrolledWindow):
     def __init__(self, stack, name):
         super().__init__()
         self.name = name
 
-        self.set_valign(Gtk.Align.START)
-        self.set_max_children_per_line(3)
-        self.set_selection_mode(Gtk.SelectionMode.NONE)
+        self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        self.box = Gtk.FlowBox()
+        self.box.set_valign(Gtk.Align.START)
+        self.box.set_max_children_per_line(3)
+        self.box.set_selection_mode(Gtk.SelectionMode.NONE)
+
+        self.add(self.box)
+        
         stack.add_titled(self, self.name, self.name)
+
+    def add_to_flowbox(self, widget):
+        self.box.add(widget)
 
 class RequestApp(Gtk.Window):
     def __init__(self):
@@ -62,6 +70,76 @@ class RequestApp(Gtk.Window):
                 "name": "Reddit",
                 "posts": [
                     {
+                        "title": "abc",
+                        "image": "https://picsum.photos/200/300",
+                        "description": "abc",
+                        "author_name": "Gero",
+                        "author_image": "https://picsum.photos/200/300"
+                    }, 
+                    {
+                        "title": "abc",
+                        "image": "https://picsum.photos/200/300",
+                        "description": "def",
+                        "author_name": "Gero",
+                        "author_image": "https://picsum.photos/200/300"
+                    }, 
+                                        {
+                        "title": "abc",
+                        "image": "https://picsum.photos/200/300",
+                        "description": "abc",
+                        "author_name": "Gero",
+                        "author_image": "https://picsum.photos/200/300"
+                    }, 
+                    {
+                        "title": "abc",
+                        "image": "https://picsum.photos/200/300",
+                        "description": "def",
+                        "author_name": "Gero",
+                        "author_image": "https://picsum.photos/200/300"
+                    }, 
+                                        {
+                        "title": "abc",
+                        "image": "https://picsum.photos/200/300",
+                        "description": "abc",
+                        "author_name": "Gero",
+                        "author_image": "https://picsum.photos/200/300"
+                    }, 
+                    {
+                        "title": "abc",
+                        "image": "https://picsum.photos/200/300",
+                        "description": "def",
+                        "author_name": "Gero",
+                        "author_image": "https://picsum.photos/200/300"
+                    }, 
+                                        {
+                        "title": "abc",
+                        "image": "https://picsum.photos/200/300",
+                        "description": "abc",
+                        "author_name": "Gero",
+                        "author_image": "https://picsum.photos/200/300"
+                    }, 
+                    {
+                        "title": "abc",
+                        "image": "https://picsum.photos/200/300",
+                        "description": "def",
+                        "author_name": "Gero",
+                        "author_image": "https://picsum.photos/200/300"
+                    }, 
+                                        {
+                        "title": "abc",
+                        "image": "https://picsum.photos/200/300",
+                        "description": "abc",
+                        "author_name": "Gero",
+                        "author_image": "https://picsum.photos/200/300"
+                    }, 
+                    {
+                        "title": "abc",
+                        "image": "https://picsum.photos/200/300",
+                        "description": "def",
+                        "author_name": "Gero",
+                        "author_image": "https://picsum.photos/200/300"
+                    }, 
+                                        {
                         "title": "abc",
                         "image": "https://picsum.photos/200/300",
                         "description": "abc",
@@ -133,7 +211,7 @@ class RequestApp(Gtk.Window):
             page = Page(stack, api["name"])
 
             for post in api["posts"]:
-                page.add(Post(post["title"], post["image"], post["description"], post["author_name"]))
+                page.add_to_flowbox(Post(post["title"], post["image"], post["description"], post["author_name"]))
             
 
 win = RequestApp()
