@@ -1,26 +1,32 @@
 #!/bin/python3
-# Load Gtk
+
 import gi
 
-gi.require_version('Gtk', '4.0')
+gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
+from components.headerbar import HeaderBar
 
-# When the application is launched…
 def on_activate(app):
-    # … create a new window…
     win = Gtk.ApplicationWindow(application=app)
-    # … with a button in it…
-    btn = Gtk.Button(label='Hello, World!')
-    # … which closes the window when clicked
-    btn.connect('clicked', lambda x: win.close())
-    win.set_child(btn)
-    win.present()
+
+    headerbar = HeaderBar(win, title="Response", subtitle="Reddit")
+    headerbar.set_custom_title
+    win.set_titlebar(headerbar)
+
+    pane = Gtk.Paned()
+    win.add(pane)
+    
+    tree = Gtk.StackSidebar()
+    pane.add1(tree)
+
+    btn2 = Gtk.Button(label="Hello, World!")
+    btn2.connect('clicked', lambda x: win.close())
+    pane.add2(btn2)
+
+    win.show_all()
 
 
-# Create a new application
-app = Gtk.Application(application_id='com.example.GtkApplication')
+app = Gtk.Application(application_id='org.gtk.Example')
 app.connect('activate', on_activate)
-
-# Run the application
 app.run(None)
