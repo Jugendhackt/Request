@@ -1,8 +1,10 @@
 #!/bin/python3
 # Load Gtk
 import gi
+
 gi.require_version('Gtk', '4.0')
 from gi.repository import Gtk
+
 
 # When the application is launched…
 def on_activate(app):
@@ -14,6 +16,7 @@ def on_activate(app):
     btn.connect('clicked', lambda x: win.close())
     win.set_child(btn)
     win.present()
+
 
 # Create a new application
 app = Gtk.Application(application_id='com.example.GtkApplication')
