@@ -7,11 +7,11 @@ class Post:
     author: str
     description: str
 
-    def __init__(self, title, image, description, author):
-        self.title = title
-        self.image = image
-        self.description = description
-        self.author = author
+    def __init__(self, post: dict):
+        self.title = post["title"]
+        self.image = post["image"]
+        self.description = post["description"]
+        self.author = post["author"]
 
     def __repr__(self):
         return f"""Post {{

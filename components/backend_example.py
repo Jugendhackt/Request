@@ -8,7 +8,7 @@ from posts import Post
 
 FETCH_STREAM_LENGTH = 10
 CALL_STREAM_LENGTH = 10
-POST_STREAM_LENGTH = 10
+POST_STREAM_LENGTH = 100
 
 post_stream = Stream(POST_STREAM_LENGTH, Post)
 call_stream = Stream(CALL_STREAM_LENGTH, Call)
@@ -21,9 +21,13 @@ backend_thread = Thread(target=backend.run)
 backend_thread.start()
 
 # Push a Call to the call stream
-call_stream.push(Call(
+backend.call(Call(
     CALL_TYPES["FETCH"], {
-        # TODO
-        "once": True
+        "api": "reddit.json",
+        "once": False
     }
 ))
+
+while True:
+    for post in post_stream:
+        print(post)
