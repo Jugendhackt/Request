@@ -7,26 +7,51 @@ from gi.repository import Gtk
 
 from components.headerbar import HeaderBar
 
-def on_activate(app):
-    win = Gtk.ApplicationWindow(application=app)
+class ListItem(Gtk.Button):
+    def __init__(self, name, logo=""):
+        super().__init__(label=name)
+        self.name = name
+        self.logo = logo
 
-    headerbar = HeaderBar(win, title="Response", subtitle="Reddit")
-    headerbar.set_custom_title
-    win.set_titlebar(headerbar)
+        self.connect("clicked", lambda x: self.clicked())
 
-    pane = Gtk.Paned()
-    win.add(pane)
-    
-    tree = Gtk.StackSidebar()
-    pane.add1(tree)
-
-    btn2 = Gtk.Button(label="Hello, World!")
-    btn2.connect('clicked', lambda x: win.close())
-    pane.add2(btn2)
-
-    win.show_all()
+    def clicked(self):
+        print(f"You clicked {self.name}!")
 
 
-app = Gtk.Application(application_id='org.gtk.Example')
-app.connect('activate', on_activate)
-app.run(None)
+class RequestApp(Gtk.Window):
+    def __init__(self):
+        super().__init__(title="Button Demo")
+
+        # Headerbar
+        self.headerbar = HeaderBar(self, title="Response", subtitle="Reddit")
+        self.set_titlebar(self.headerbar)
+
+        # Pane
+        self.pane = Gtk.Paned()
+        self.add(self.pane)
+
+        # Sidemenu
+        self.sidemenu = Gtk.ListBox()
+        self.pane.add1(self.sidemenu)
+
+        self.apiList = []
+        self.apiList.append(ListItem("Reddit"))
+        self.apiList.append(ListItem("YouTube"))
+        self.apiList.append(ListItem("RSS"))
+
+        for item in self.apiList:
+            self.sidemenu.prepend(item)
+
+
+        # Content
+        self.btn = Gtk.Button(label="Hello, World!")
+        self.btn.connect('clicked', lambda x: self.close())
+        self.pane.add2(self.btn)
+
+
+win = RequestApp()
+win.connect("destroy", Gtk.main_quit)
+win.show_all()
+Gtk.main()
+
