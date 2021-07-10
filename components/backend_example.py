@@ -1,7 +1,10 @@
+#!/bin/python3
+
 from threading import Thread
 
 from backend import Backend, Call, CALL_TYPES
 from streams import Stream
+from posts import Post
 
 FETCH_STREAM_LENGTH = 10
 CALL_STREAM_LENGTH = 10

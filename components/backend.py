@@ -1,6 +1,7 @@
 #!/bin/python3
 
 from streams import Stream
+from posts import Post
 
 CALL_TYPES = {
     "FETCH": 1,
@@ -24,11 +25,12 @@ class Call:
 
 class Backend:
     def __init__(self, post_stream: Stream, call_stream: Stream):
+        """
         if issubclass(post_stream.type(), Post):
             raise TypeError("Post Stream is of wrong type: {}, expected {}".format(post_stream.type(), Post))
         if issubclass(call_stream.type(), Call):
             raise TypeError("Call Stream is of wrong type: {}, expected {}".format(call_stream.type(), Call))
-
+"""
         self._post_stream = post_stream
         self._call_stream = call_stream
         self._to_fetch = []
@@ -38,7 +40,6 @@ class Backend:
         self._call_stream.push(call)
 
     def _handle_calls(self):
-        print("_handle_calls")
         for call in self._call_stream:
             print("{}".format(call))
             if call.type == CALL_TYPES["FETCH"]:
