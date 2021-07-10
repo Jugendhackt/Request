@@ -21,6 +21,8 @@ class Post(Gtk.Button):
         self.add(self.box)
 
         self.titleLabel = Gtk.Label(label=self.title)
+        self.titleLabel.set_max_width_chars(30)
+        self.titleLabel.set_line_wrap(True)
         self.descriptionLabel = Gtk.Label(label=self.description)
         self.authorLabel = Gtk.Label(label=self.author_name)
         self.imageLabel = Gtk.Image()
