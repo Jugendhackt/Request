@@ -1,15 +1,15 @@
 #!/bin/python3
 
 import gi
-
-gi.require_version("Gtk", "3.0")
+import urllib3
+from gi.repository import Gio
 from gi.repository import Gtk
+from gi.repository.GdkPixbuf import Pixbuf
 
 from components.headerbar import HeaderBar
 
-from gi.repository.GdkPixbuf import Pixbuf
-from gi.repository import Gio
-import urllib3
+gi.require_version("Gtk", "3.0")
+
 
 class Post(Gtk.Button):
     def __init__(self, title="", image="", description="", author_name=""):
@@ -53,6 +53,7 @@ class Page(Gtk.FlowBox):
         self.set_selection_mode(Gtk.SelectionMode.NONE)
         stack.add_titled(self, self.name, self.name)
 
+
 class RequestApp(Gtk.Window):
     def __init__(self):
         super().__init__(title="Button Demo")
@@ -67,14 +68,14 @@ class RequestApp(Gtk.Window):
                         "description": "abc",
                         "author_name": "Gero",
                         "author_image": "https://picsum.photos/200/300"
-                    }, 
+                    },
                     {
                         "title": "abc",
                         "image": "https://picsum.photos/200/300",
                         "description": "def",
                         "author_name": "Gero",
                         "author_image": "https://picsum.photos/200/300"
-                    }, 
+                    },
                     {
                         "title": "abc",
                         "image": "https://picsum.photos/200/300",
@@ -93,14 +94,14 @@ class RequestApp(Gtk.Window):
                         "description": "jkl",
                         "author_name": "Gero",
                         "author_image": "https://picsum.photos/200/300"
-                    }, 
+                    },
                     {
                         "title": "abc",
                         "image": "https://picsum.photos/200/300",
                         "description": "mno",
                         "author_name": "Gero",
                         "author_image": "https://picsum.photos/200/300"
-                    }, 
+                    },
                     {
                         "title": "abc",
                         "image": "https://picsum.photos/200/300",
@@ -134,10 +135,9 @@ class RequestApp(Gtk.Window):
 
             for post in api["posts"]:
                 page.add(Post(post["title"], post["image"], post["description"], post["author_name"]))
-            
+
 
 win = RequestApp()
 win.connect("destroy", Gtk.main_quit)
 win.show_all()
 Gtk.main()
-

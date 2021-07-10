@@ -1,6 +1,3 @@
-import json
-
-
 class Post:
     title: str
     image: str
@@ -10,7 +7,7 @@ class Post:
     def __init__(self, post: dict):
         self.title = post["title"]
         self.image = post["image"]
-        self.description = post["description"]
+        self.description = post["description"] if "description" in post else ""
         self.author = post["author"]
 
     def __repr__(self):

@@ -3,8 +3,8 @@
 from threading import Thread
 
 from backend import Backend, Call, CALL_TYPES
-from streams import Stream
 from posts import Post
+from streams import Stream
 
 FETCH_STREAM_LENGTH = 10
 CALL_STREAM_LENGTH = 10
@@ -28,6 +28,30 @@ backend.call(Call(
     }
 ))
 
+post = None
+
+while post is None:
+    post = post_stream.pop()
+
+while post is not None:
+    post = post_stream.pop()
+
+print("Received more posts")
+
+backend.call(Call(
+    CALL_TYPES["STOP_FETCHING"], {
+        "api": "reddit.json",
+        "once": False
+    }
+))
+
+print("Made call")
+
 while True:
-    for post in post_stream:
-        print(post)
+    while post is None:
+        post = post_stream.pop()
+
+    while post is not None:
+        post = post_stream.pop()
+
+    print("Received more posts")

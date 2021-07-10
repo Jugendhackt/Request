@@ -3,8 +3,9 @@ import json
 
 import grequests
 import jmespath
-from streams import Stream
+
 from posts import Post
+from streams import Stream
 
 CALL_TYPES = {
     "FETCH": 1,
@@ -44,16 +45,28 @@ class Backend:
         self._call_stream.push(call)
 
     def _handle_calls(self):
+        # Iterate over all unhandled calls
         for call in self._call_stream:
             print("{}".format(call))
+
             if call.type == CALL_TYPES["FETCH"]:
                 self._to_fetch.push(call.args)
             elif call.type == CALL_TYPES["STOP_FETCHING"]:
                 self._to_stop.append(call.args)
 
     def _fetch_current(self):
+        to_fetch = Stream(10, dict)
         for fetch in self._to_fetch:
             self._fetch(fetch)
+
+            # Push fetch back to stream
+            if not fetch["once"]:
+                # Check if a stop fetch exists for this api
+                for stop_fetch in self._to_stop:
+                    if stop_fetch["api"] == fetch["api"]:
+                        return
+                to_fetch.push(fetch)
+        self._to_fetch = to_fetch
 
     def _fetch(self, fetch):
         # Read API specification from file
@@ -72,10 +85,6 @@ class Backend:
         # Create and push Post objects
         for post in posts:
             self._post_stream.push(Post(post))
-
-        # Push fetch back to stream
-        if not fetch["once"] and fetch not in self._to_stop:
-            self._to_fetch.push(fetch)
 
     def run(self):
         while True:

@@ -74,7 +74,6 @@ class HeaderBar(Gtk.HeaderBar):
         self.button_box.pack_start(self.fullscreen_btn, False, False, 3)
         self.fullscreen_btn.connect('clicked', self.on_fullscreen_clicked)
 
-
         # Minimize button
         self.minimize_btn = Gtk.Button()
         self.minimize_btn.add(self.minimize_icon)
@@ -85,7 +84,6 @@ class HeaderBar(Gtk.HeaderBar):
         self.button_box.pack_start(self.minimize_btn, False, False, 3)
         self.minimize_btn.connect('clicked', self.on_minimize_clicked)
 
-
         # Maximize button
         self.maximize_btn = Gtk.Button()
         self.maximize_btn.add(self.maximize_icon)
@@ -95,7 +93,6 @@ class HeaderBar(Gtk.HeaderBar):
         self.maximize_btn.get_style_context().add_class('maximize')
         self.button_box.pack_start(self.maximize_btn, False, False, 3)
         self.maximize_btn.connect('clicked', self.on_maximize_clicked)
-
 
         # Close button
         self.close_btn = Gtk.Button()
