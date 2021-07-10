@@ -41,7 +41,12 @@ class RequestApp(Gtk.Window):
 
         # Pages and posts
         for api in self.apis:
+            def edge_reached(_scrolled_window, pos):
+                if pos ==3:
+                    print("You reached the end")
+
             page = Page(stack, api["name"])
+            page.connect("edge-reached", edge_reached)
 
             posts = components.backend.Backend.fetch({
                 "api": api["api"]
