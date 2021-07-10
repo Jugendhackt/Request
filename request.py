@@ -23,9 +23,9 @@ class Post(Gtk.Button):
         self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.add(self.box)
 
-        self.titleLabel = Gtk.Label(self.title)
-        self.descriptionLabel = Gtk.Label(self.description)
-        self.authorLabel = Gtk.Label(self.author_name)
+        self.titleLabel = Gtk.Label(label=self.title)
+        self.descriptionLabel = Gtk.Label(label=self.description)
+        self.authorLabel = Gtk.Label(label=self.author_name)
         self.imageLabel = Gtk.Image()
 
         self.box.pack_start(self.titleLabel, True, True, 0)
