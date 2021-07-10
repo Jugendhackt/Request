@@ -11,30 +11,47 @@ from gi.repository.GdkPixbuf import Pixbuf
 from gi.repository import Gio
 import urllib3
 
-class ListItem(Gtk.Button):
-    def __init__(self, name, logo=""):
-        super().__init__(label=name)
-        self.name = name
-        self.logo = logo
-
-        self.connect("clicked", lambda x: self.clicked())
-
-    def clicked(self):
-        print(f"You clicked {self.name}!")
-
 class Post(Gtk.Button):
-    def __init__(self, title="", image="", description="", author_name="", author_image=""):
-        super().__init__(label=title)
+    def __init__(self, title="", image="", description="", author_name=""):
+        super().__init__()
         self.title = title
         self.image = image
         self.description = description
         self.author_name = author_name
-        self.author_image= author_image
 
-        self.connect("clicked", lambda x: self.clicked())
+        # Define widgets
+        self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.add(self.box)
 
-    def clicked(self):
-        print(f"You clicked {self.title}!")
+        self.titleLabel = Gtk.Label(self.title)
+        self.descriptionLabel = Gtk.Label(self.description)
+        self.authorLabel = Gtk.Label(self.author_name)
+        self.imageLabel = Gtk.Image()
+
+        self.box.pack_start(self.titleLabel, True, True, 0)
+        self.box.pack_start(self.imageLabel, True, True, 0)
+        self.box.pack_start(self.descriptionLabel, True, True, 0)
+        self.box.pack_start(self.authorLabel, True, True, 0)
+
+        # Load image from url
+        http = urllib3.PoolManager()
+
+        response = http.request('GET', self.image)
+
+        input_stream = Gio.MemoryInputStream.new_from_data(response.data, None)
+        pixbuf = Pixbuf.new_from_stream(input_stream, None)
+        self.imageLabel.set_from_pixbuf(pixbuf)
+
+
+class Page(Gtk.FlowBox):
+    def __init__(self, stack, name):
+        super().__init__()
+        self.name = name
+
+        self.set_valign(Gtk.Align.START)
+        self.set_max_children_per_line(3)
+        self.set_selection_mode(Gtk.SelectionMode.NONE)
+        stack.add_titled(self, self.name, self.name)
 
 class RequestApp(Gtk.Window):
     def __init__(self):
@@ -98,6 +115,7 @@ class RequestApp(Gtk.Window):
         self.headerbar = HeaderBar(self, title="Response", subtitle="Reddit")
         self.set_titlebar(self.headerbar)
 
+        # Sidebar
         grid = Gtk.Grid()
         self.add(grid)
 
@@ -110,44 +128,13 @@ class RequestApp(Gtk.Window):
         stacksidebar.set_stack(stack)
         grid.attach(stacksidebar, 0, 0, 1, 1)
 
+        # Pages and posts
         for api in self.apis:
-            page = Gtk.FlowBox()
-            page.set_valign(Gtk.Align.START)
-            page.set_max_children_per_line(3)
-            page.set_selection_mode(Gtk.SelectionMode.NONE)
+            page = Page(stack, api["name"])
+
             for post in api["posts"]:
-                myPost = Gtk.Button()
-                box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-                myPost.add(box)
-
-                title = Gtk.Label(post["title"])
-                description = Gtk.Label(post["description"])
-                author = Gtk.Label(post["author_name"])
-                image = Gtk.Image()
-
-                http = urllib3.PoolManager()
-
-                url = post["image"]
-                response = http.request('GET', url)
-
-                input_stream = Gio.MemoryInputStream.new_from_data(response.data, None)
-                pixbuf = Pixbuf.new_from_stream(input_stream, None)
-                image = Gtk.Image()
-                image.set_from_pixbuf(pixbuf)
-
-                box.pack_start(title, True, True, 0)
-                box.pack_start(image, True, True, 0)
-                box.pack_start(description, True, True, 0)
-                box.pack_start(author, True, True, 0)
-
-                page.add(myPost)
-
-
-
-            name = "label%s" % api["name"]
-            title = "Page %s" % api["name"]
-            stack.add_titled(page, name, title)
-
+                page.add(Post(post["title"], post["image"], post["description"], post["author_name"]))
+            
 
 win = RequestApp()
 win.connect("destroy", Gtk.main_quit)
