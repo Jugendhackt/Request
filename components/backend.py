@@ -4,8 +4,8 @@ import json
 import grequests
 import jmespath
 
-from posts import Post
-from streams import Stream
+from components.posts import Post
+from components.streams import Stream
 
 CALL_TYPES = {
     "FETCH": 1,
@@ -28,15 +28,13 @@ class Call:
 
 
 class Backend:
-    def __init__(self, post_stream: Stream, call_stream: Stream):
+    def __init__(self, post_streams: dict):
         """
         if issubclass(post_stream.type(), Post):
             raise TypeError("Post Stream is of wrong type: {}, expected {}".format(post_stream.type(), Post))
-        if issubclass(call_stream.type(), Call):
-            raise TypeError("Call Stream is of wrong type: {}, expected {}".format(call_stream.type(), Call))
 """
-        self._post_stream = post_stream
-        self._call_stream = call_stream
+        self._post_streams = post_streams
+        self._call_stream = Stream(10, Call)
         self._to_fetch = Stream(10, dict)
         self._to_stop = []
 
@@ -50,6 +48,8 @@ class Backend:
             print("{}".format(call))
 
             if call.type == CALL_TYPES["FETCH"]:
+                if call.args["api"] not in self._post_streams:
+                    raise ValueError("Unknown api")
                 self._to_fetch.push(call.args)
             elif call.type == CALL_TYPES["STOP_FETCHING"]:
                 self._to_stop.append(call.args)
@@ -68,7 +68,8 @@ class Backend:
                 to_fetch.push(fetch)
         self._to_fetch = to_fetch
 
-    def _fetch(self, fetch):
+    @staticmethod
+    def fetch(fetch):
         # Read API specification from file
         with open(f"apis/{fetch['api']}", "r") as file:
             api = json.load(file)
@@ -81,10 +82,13 @@ class Backend:
         )
         # Transform JSON from server to Post objects
         posts = jmespath.search(api["query"], res)
+        posts = [Post(post, fetch["api"]) for post in posts]
+        # Return posts
+        return posts
 
-        # Create and push Post objects
-        for post in posts:
-            self._post_stream.push(Post(post))
+        ## Create and push Post objects
+        # for post in posts:
+        #    self._post_streams[fetch["api"]].push(post))
 
     def run(self):
         while True:

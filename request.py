@@ -2,13 +2,19 @@
 
 import gi
 import urllib3
+import components.posts
+import components.backend
+from threading import Thread
+
+from components.streams import Stream
 from gi.repository import Gio
-from gi.repository import Gtk
+from components.headerbar import HeaderBar
+gi.require_version("GdkPixbuf", "2.0")
 from gi.repository.GdkPixbuf import Pixbuf
 
-from components.headerbar import HeaderBar
-
 gi.require_version("Gtk", "3.0")
+from gi.repository import Gtk
+
 
 
 class Post(Gtk.Button):
@@ -61,56 +67,9 @@ class RequestApp(Gtk.Window):
         self.apis = [
             {
                 "name": "Reddit",
-                "posts": [
-                    {
-                        "title": "abc",
-                        "image": "https://picsum.photos/200/300",
-                        "description": "abc",
-                        "author_name": "Gero",
-                        "author_image": "https://picsum.photos/200/300"
-                    },
-                    {
-                        "title": "abc",
-                        "image": "https://picsum.photos/200/300",
-                        "description": "def",
-                        "author_name": "Gero",
-                        "author_image": "https://picsum.photos/200/300"
-                    },
-                    {
-                        "title": "abc",
-                        "image": "https://picsum.photos/200/300",
-                        "description": "ghi",
-                        "author_name": "Gero",
-                        "author_image": "https://picsum.photos/200/300"
-                    }
-                ]
+                "api": "reddit.json",
+                "posts": []
             },
-            {
-                "name": "YouTube",
-                "posts": [
-                    {
-                        "title": "abc",
-                        "image": "https://picsum.photos/200/300",
-                        "description": "jkl",
-                        "author_name": "Gero",
-                        "author_image": "https://picsum.photos/200/300"
-                    },
-                    {
-                        "title": "abc",
-                        "image": "https://picsum.photos/200/300",
-                        "description": "mno",
-                        "author_name": "Gero",
-                        "author_image": "https://picsum.photos/200/300"
-                    },
-                    {
-                        "title": "abc",
-                        "image": "https://picsum.photos/200/300",
-                        "description": "pqr",
-                        "author_name": "Gero",
-                        "author_image": "https://picsum.photos/200/300"
-                    }
-                ]
-            }
         ]
         # Headerbar
         self.headerbar = HeaderBar(self, title="Response", subtitle="Reddit")
@@ -133,8 +92,20 @@ class RequestApp(Gtk.Window):
         for api in self.apis:
             page = Page(stack, api["name"])
 
-            for post in api["posts"]:
-                page.add(Post(post["title"], post["image"], post["description"], post["author_name"]))
+            posts = components.backend.Backend.fetch({
+                "api": api["api"]
+            })
+
+            for post in posts:
+                page.add(Post(post.title, post.image, post.description, post.author))
+                print(post)
+
+
+def handle_posts(post_streams: dict, pages: dict):
+    while True:
+        for stream in post_streams:
+            for post in post_streams[stream]:
+                pages[stream].add(Post(post.title, post.image, post.description, post.author))
 
 
 win = RequestApp()

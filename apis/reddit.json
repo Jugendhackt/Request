@@ -1,5 +1,5 @@
 {
     "name": "Reddit",
     "url": "https://reddit.com/r/mildlyinteresting.json",
-    "query": "data.children[].data[].{title: title, author: author, image: url}"
+    "query": "data.children[].data[].{title: title, author: author, image: thumbnail}"
 }
