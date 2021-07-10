@@ -9,6 +9,7 @@ from gi.repository import Gtk
 def on_activate(app):
     win = Gtk.ApplicationWindow(application=app)
     btn = Gtk.Button(label="Hello, World!")
+    img = Gtk.Image
     btn.connect('clicked', lambda x: win.close())
     win.add(btn)
     win.show_all()

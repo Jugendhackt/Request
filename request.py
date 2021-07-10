@@ -14,7 +14,6 @@ def on_activate(app):
     btn = Gtk.Button(label='Hello, World!')
     # … which closes the window when clicked
     btn.connect('clicked', lambda x: win.close())
-    win.set_child(btn)
     win.present()
 
 
