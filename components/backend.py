@@ -1,8 +1,8 @@
 #!/bin/python3
 import json
 
-import requests
 import jmespath
+import requests
 
 from components.posts import Post
 from components.streams import Stream

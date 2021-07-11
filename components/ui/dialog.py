@@ -3,6 +3,7 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
+
 class AddAPIDialog(Gtk.Dialog):
     def __init__(self, parent):
         super().__init__(title="My Dialog", transient_for=parent, flags=0)
@@ -14,7 +15,6 @@ class AddAPIDialog(Gtk.Dialog):
 
         box = Gtk.ListBox()
 
-        
         nameLabel = Gtk.Label(label="API-Name")
         nameEntry = Gtk.Entry()
         box.add(nameLabel)

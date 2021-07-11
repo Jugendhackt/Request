@@ -13,6 +13,7 @@ import requests
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
+
 class RequestApp(Gtk.Window):
     def __init__(self):
         super().__init__(title="Button Demo")
@@ -38,7 +39,8 @@ class RequestApp(Gtk.Window):
         stack = Gtk.Stack()
         stack.set_hexpand(True)
         stack.set_vexpand(True)
-        stack.connect("notify::visible-child", lambda stacknow, param: self.page_changed(stack.get_visible_child_name()))
+        stack.connect("notify::visible-child",
+                      lambda stacknow, param: self.page_changed(stack.get_visible_child_name()))
         grid.attach(stack, 1, 0, 1, 1)
 
         stacksidebar = Gtk.StackSidebar()
@@ -50,7 +52,7 @@ class RequestApp(Gtk.Window):
             self.create_page(stack, api)
 
     def create_page(self, stack, api):
-        
+
         page = Page(stack, api["name"])
         page.connect("edge-reached", lambda scrolled_win, pos: pos == 3 and self.edge_reached(api["name"]))
 
@@ -66,7 +68,6 @@ class RequestApp(Gtk.Window):
 
     def page_changed(self, name):
         print("You changed to %s" % name)
-    
 
 
 win = RequestApp()
