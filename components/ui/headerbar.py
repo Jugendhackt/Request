@@ -6,6 +6,8 @@ gi.require_version('Gdk', '3.0')
 from gi.repository import Gtk
 from gi.repository import Gdk
 
+from components.ui.dialog import AddAPIDialog
+
 ICONSIZE = Gtk.IconSize.MENU
 
 
@@ -26,3 +28,11 @@ class HeaderBar(Gtk.HeaderBar):
         self.add_btn.add(add_icon)
 
         self.pack_end(self.add_btn)
+
+        self.add_btn.connect("clicked", lambda *x: self.add_api())
+
+    def add_api(self):
+        dialog = AddAPIDialog(None)
+        response = dialog.run()
+
+        print(response)
