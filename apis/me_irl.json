@@ -1,0 +1,5 @@
+{
+    "name": "Reddit",
+    "url": "https://reddit.com/r/me_irl.json",
+    "query": "data.children[].data[].{title: title, author: author, image: thumbnail}"
+}

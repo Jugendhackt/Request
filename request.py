@@ -8,6 +8,8 @@ from components.ui.headerbar import HeaderBar
 from components.ui.page import Page
 from components.ui.post import Post
 
+import requests
+
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
@@ -17,13 +19,13 @@ class RequestApp(Gtk.Window):
 
         self.apis = [
             {
-                "name": "Reddit",
-                "api": "reddit.json"
+                "name": "Reddit mildlyinteresting",
+                "api": "mildlyinteresting.json"
             },
             {
-                "name": "Twitter",
-                "api": "reddit.json"
-            },
+                "name": "Reddit memes",
+                "api": "memes.json"
+            }
         ]
         # Headerbar
         self.headerbar = HeaderBar(self, title="Response", subtitle="Reddit")
