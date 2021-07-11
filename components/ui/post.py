@@ -38,5 +38,5 @@ class Post(Gtk.Button):
             response = http.request('GET', self.image)
 
             input_stream = Gio.MemoryInputStream.new_from_data(response.data, None)
-            pixbuf = Pixbuf.new_from_stream(input_stream, None)
+            pixbuf = Pixbuf.new_from_stream_at_scale(input_stream, width=300, height=300, preserve_aspect_ratio=True, cancellable=None)
             self.imageLabel.set_from_pixbuf(pixbuf)
