@@ -1,0 +1,5 @@
+{
+    "name": "Coub",
+    "url": "https://coub.com/api/v2/timeline/hot",
+    "query": "coubs[].{title: title, author: author, image: small_picture}"
+}

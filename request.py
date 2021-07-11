@@ -26,6 +26,14 @@ class RequestApp(Gtk.Window):
             {
                 "name": "Reddit memes",
                 "api": "memes.json"
+            },
+            {
+                "name": "Tagesschau",
+                "api": "tagesschau.json"
+            },
+            {
+                "name": "Coub",
+                "api": "coub.json"
             }
         ]
         # Headerbar
