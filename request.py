@@ -9,6 +9,8 @@ from components.ui.page import Page
 from components.ui.post import Post
 
 import requests
+import json
+import os
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
@@ -18,24 +20,15 @@ class RequestApp(Gtk.Window):
     def __init__(self):
         super().__init__(title="Button Demo")
 
-        self.apis = [
-            {
-                "name": "Reddit mildlyinteresting",
-                "api": "mildlyinteresting.json"
-            },
-            {
-                "name": "Reddit memes",
-                "api": "memes.json"
-            },
-            {
-                "name": "Tagesschau",
-                "api": "tagesschau.json"
-            },
-            {
-                "name": "Coub",
-                "api": "coub.json"
-            }
-        ]
+        file_name = "userAPIs.json"
+        if not os.path.exists(file_name):
+            with open(file_name, 'w') as file:
+                file.write("[]")
+
+        with open(file_name, 'r') as file:
+            self.apis = json.load(file)
+            print(self.apis)
+
         # Headerbar
         self.headerbar = HeaderBar(self, title="Response", subtitle="Reddit")
         self.set_titlebar(self.headerbar)
@@ -65,7 +58,8 @@ class RequestApp(Gtk.Window):
         page.connect("edge-reached", lambda scrolled_win, pos: pos == 3 and self.edge_reached(api["name"]))
 
         posts = components.backend.Backend.fetch({
-            "api": api["api"]
+            "url": api["url"],
+            "query": api["query"]
         })
 
         for post in posts:

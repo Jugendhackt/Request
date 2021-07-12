@@ -70,18 +70,15 @@ class Backend:
 
     @staticmethod
     def fetch(fetch):
-        # Read API specification from file
-        with open(f"apis/{fetch['api']}", "r") as file:
-            api = json.load(file)
         # Get JSON from server
-        req = requests.get(api["url"], headers={'User-Agent': 'Request'})
+        req = requests.get(fetch["url"], headers={'User-Agent': 'Request'})
         if not req.ok:
             print(req.status_code)
             return []
         res = req.json()
         # Transform JSON from server to Post objects
-        posts = jmespath.search(api["query"], res)
-        posts = [Post(post, fetch["api"]) for post in posts]
+        posts = jmespath.search(fetch["query"], res)
+        posts = [Post(post) for post in posts]
         # Return posts
         return posts
 
