@@ -30,8 +30,23 @@ class HeaderBar(Gtk.HeaderBar):
 
         self.add_btn.connect("clicked", lambda *x: self.add_api())
 
+        self.response = {}
+        self.dialog = {}
+        self.callback=lambda *x:()
+
     def add_api(self):
-        dialog = AddAPIDialog(None)
-        response = dialog.run()
+        self.dialog = AddAPIDialog(None)
+        response = self.dialog.run()
+        self.dialog.hide()
+
+        if response == Gtk.ResponseType.OK:
+            print("The OK button was clicked")
+            responseData = self.dialog.get_input()
+            self.callback(responseData)
+        elif response == Gtk.ResponseType.CANCEL:
+            print("The Cancel button was clicked")
 
         print(response)
+
+    def on_dialog_exit(self, callback):
+        self.callback = callback

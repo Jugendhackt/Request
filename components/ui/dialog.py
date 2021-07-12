@@ -6,7 +6,7 @@ from gi.repository import Gtk
 
 class AddAPIDialog(Gtk.Dialog):
     def __init__(self, parent):
-        super().__init__(title="Add an API", transient_for=parent, flags=0)
+        super().__init__(title="Add an API", transient_for=parent, flags=Gtk.DialogFlags.MODAL)
         self.add_buttons(
             Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OK, Gtk.ResponseType.OK
         )
@@ -16,20 +16,28 @@ class AddAPIDialog(Gtk.Dialog):
         box = Gtk.ListBox()
 
         nameLabel = Gtk.Label(label="API Name")
-        nameEntry = Gtk.Entry()
+        self.nameEntry = Gtk.Entry()
         box.add(nameLabel)
-        box.add(nameEntry)
+        box.add(self.nameEntry)
 
         urlLabel = Gtk.Label(label="URL")
-        urlEntry = Gtk.Entry()
+        self.urlEntry = Gtk.Entry()
         box.add(urlLabel)
-        box.add(urlEntry)
+        box.add(self.urlEntry)
 
         queryLabel = Gtk.Label(label="JSON Query")
-        queryEntry = Gtk.Entry()
+        self.queryEntry = Gtk.Entry()
         box.add(queryLabel)
-        box.add(queryEntry)
+        box.add(self.queryEntry)
 
         area = self.get_content_area()
         area.add(box)
         self.show_all()
+
+    def get_input(self):
+        return {
+            "name": self.nameEntry.get_text(),
+            "url": self.urlEntry.get_text(),
+            "query": self.queryEntry.get_text()
+        }
+
