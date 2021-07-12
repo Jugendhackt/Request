@@ -1,5 +1,5 @@
 {
-    "name": "Reddit",
+    "name": "Tagesschau",
     "url": "https://www.tagesschau.de/api2/",
     "query": "news[].{title: title, author: date, image: images[0].videowebs.imageurl}"
 }

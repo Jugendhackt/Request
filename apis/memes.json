@@ -1,5 +1,5 @@
 {
-    "name": "Reddit",
+    "name": "Reddit memes",
     "url": "https://reddit.com/r/memes.json",
     "query": "data.children[].data[].{title: title, author: author, image: thumbnail}"
 }
