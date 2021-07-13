@@ -71,14 +71,7 @@ class RequestApp(Gtk.Window):
 
         page = Page(stack, api["name"])
         page.connect("edge-reached", lambda scrolled_win, pos: pos == 3 and self.edge_reached(api["name"]))
-
-        posts = components.backend.Backend.fetch({
-            "url": api["url"],
-            "query": api["query"]
-        })
-
-        for post in posts:
-            page.add_to_flowbox(Post(post.title, post.image, post.description, post.author))
+        api["page"] = page
 
     # listen for UI input changes
     def edge_reached(self, name):
@@ -86,6 +79,20 @@ class RequestApp(Gtk.Window):
 
     def page_changed(self, name):
         print("You changed to %s" % name)
+
+        api = [*filter(lambda elem: elem["name"] == name, self.apis)][0]
+
+        print(api)
+
+        posts = components.backend.Backend.fetch({
+            "url": api["url"],
+            "query": api["query"]
+        })
+
+        for post in posts:
+            api["page"].add_to_flowbox(Post(post.title, post.image, post.description, post.author))
+
+        api["page"].show_all()
 
 # Run application
 win = RequestApp()
