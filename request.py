@@ -8,7 +8,8 @@ from components.ui.headerbar import HeaderBar
 from components.ui.page import Page
 from components.ui.post import Post
 
-import requests
+# import requests
+from requests_futures.sessions import FuturesSession
 import json
 import os
 
@@ -88,6 +89,16 @@ class RequestApp(Gtk.Window):
             "url": api["url"],
             "query": api["query"]
         })
+
+        session = FuturesSession(max_workers=20)
+        # first request is started in background
+
+        for post in posts:
+            post.image = session.get(post.image)
+
+        for post in posts:
+            result = post.image.result()
+            post.image = result.content
 
         for post in posts:
             api["page"].add_to_flowbox(Post(post.title, post.image, post.description, post.author))

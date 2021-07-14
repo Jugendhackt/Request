@@ -33,10 +33,10 @@ class Post(Gtk.Button):
 
         if self.image != "":
             # Load image from url
-            http = urllib3.PoolManager()
+            # http = urllib3.PoolManager()
 
-            response = http.request('GET', self.image)
+            # response = http.request('GET', self.image)
 
-            input_stream = Gio.MemoryInputStream.new_from_data(response.data, None)
+            input_stream = Gio.MemoryInputStream.new_from_data(self.image, None)
             pixbuf = Pixbuf.new_from_stream_at_scale(input_stream, width=300, height=300, preserve_aspect_ratio=True, cancellable=None)
             self.imageLabel.set_from_pixbuf(pixbuf)
